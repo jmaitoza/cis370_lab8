@@ -8,8 +8,6 @@
 
 int ForkExec(char *temp[]) {
   pid_t pid;
-  char buffer;
-
   pid = fork();
   if (pid == 0) {
     execvp(temp[0], temp);
