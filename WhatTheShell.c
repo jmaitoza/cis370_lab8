@@ -37,27 +37,30 @@ int main(void) {
     char *args[10] = {"\0", "\0", "\0", "\0", "\0",
                       "\0", "\0", "\0", "\0", "\0"};
     const char space[10] = " ";
-    char *copy[MAX_LINE];
-    char *token;
-    // fgets(line, MAX_LINE, stdout);
+
     read(0, line, MAX_LINE);
 
     int line_len = strlen(line);
     line[line_len - 1] = 0; // strip line of last character
 
-    token = strtok(line, space); // gets first token
+    char *token = strtok(line, space); // gets first token
+    int num_tokens = 0;
 
     // step through the other tokens
     while (token != NULL) {
-      args[count] = token;
-
-      // printf(" %s\n", args[count]); // debug print
-      token = strtok(NULL, space);
-      count++; // incrememnt array counter to next token
+      // if token is null, break out of loop to execute the commands
+      if (token == NULL) {
+        break;
+      }
+      args[num_tokens] = token;
+      num_tokens++;
+      token = strtok(NULL, space); // gets the next token
     }
+    // this sets the index to be null. without the line the shell completely
+    // breaks and i cannot for the life of me figure out why
+    args[num_tokens] = NULL; // terminate array
 
     ForkExec(args);
-    count = 0;
   }
   return 0;
 }
