@@ -9,13 +9,14 @@
 
 int ForkExec(char *temp[]) {
   pid_t pid;
+  int childStatus, waitC;
   pid = fork();
-  wait(NULL);
+  waitC = wait(&childStatus);
   if (pid == 0) {
     execvp(temp[0], temp);
     exit(0);
   }
-
+  int exitC = WEXITSTATUS(childStatus);
   return 0;
 }
 
@@ -36,6 +37,7 @@ int main(void) {
     char *args[10] = {"\0", "\0", "\0", "\0", "\0",
                       "\0", "\0", "\0", "\0", "\0"};
     const char space[10] = " ";
+    char *copy[MAX_LINE];
     char *token;
     // fgets(line, MAX_LINE, stdout);
     read(0, line, MAX_LINE);
@@ -48,6 +50,7 @@ int main(void) {
     // step through the other tokens
     while (token != NULL) {
       args[count] = token;
+
       // printf(" %s\n", args[count]); // debug print
       token = strtok(NULL, space);
       count++; // incrememnt array counter to next token
